@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OktaAPIMCore", "OktaAPIMCor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OktaAPIMConsole", "OktaAPIMConsole\OktaAPIMConsole.csproj", "{94BCC3F0-9770-4EDC-8E7E-87346729E64F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OktaAPIMJS", "OktaAPIMJS\OktaAPIMJS.csproj", "{49E6E6E4-BB30-4EC6-944F-F913D3CF62F3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{94BCC3F0-9770-4EDC-8E7E-87346729E64F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94BCC3F0-9770-4EDC-8E7E-87346729E64F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94BCC3F0-9770-4EDC-8E7E-87346729E64F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49E6E6E4-BB30-4EC6-944F-F913D3CF62F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49E6E6E4-BB30-4EC6-944F-F913D3CF62F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49E6E6E4-BB30-4EC6-944F-F913D3CF62F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49E6E6E4-BB30-4EC6-944F-F913D3CF62F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

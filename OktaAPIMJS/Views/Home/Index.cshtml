@@ -1,0 +1,89 @@
+﻿<!--
+//===============================================================================
+// Microsoft FastTrack for Azure
+// Okta Azure API Management Samples
+//===============================================================================
+// Copyright © Microsoft Corporation.  All rights reserved.
+// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY
+// OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT
+// LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+// FITNESS FOR A PARTICULAR PURPOSE.
+//===============================================================================
+-->
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+@section Scripts {
+    <script src="https://ok1static.oktacdn.com/assets/js/sdk/okta-auth-js/2.0.1/okta-auth-js.min.js" type="text/javascript"></script>
+
+    <script>
+        // Bootstrap the AuthJS Client
+        var authClient = new OktaAuth({
+            // Org URL
+            url: '{Your Okta organization URL}',
+            // Authorization server
+            issuer: '{Your Okta organization URL}/oauth2/default',
+            // OpenID Connect APP Client ID
+            clientId: '{Your client ID in Okta}',
+            // Trusted Origin Redirect URI
+            redirectUri: '{Your Redirect URI for the application in Okta}'
+        });
+
+        // Check for successful authentication
+        authClient.token.parseFromUrl()
+            .then(function (res) {
+                console.log("Authenticated successfully!");
+                console.log(res);
+                var state = res.state; // passed to getWithRedirect(), can be any string
+
+                // Retrieve access token for API
+                authClient.token.getWithoutPrompt({
+                      responseType: ['token'],
+                      scopes: ['nimccollapimprod']
+                    })
+                    .then(function(res) {
+                        // Call API
+                        console.log(res[0].accessToken);
+                        var accessToken = res[0].accessToken;
+                        $.ajax({
+                            url: '{Your API URL}',
+                            type: 'GET',
+                            cache: false,
+                            beforeSend: function (xhr) {
+                                xhr.setRequestHeader('Ocp-Apim-Subscription-Key', '{Your APIM subscription key}');
+                                xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+                            },
+                            success: function (data) {
+                                console.log("Successfully called API");
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                console.log('error', textStatus, errorThrown);
+                            }
+                        });
+                    })
+                    .catch(function(err) {
+                      // handle OAuthError or AuthSdkError (AuthSdkError will be thrown if app is in OAuthCallback state)
+                        console.log("Could not get access token without prompt - redirecting to Okta");
+                        console.log(err);
+                        authClient.token.getWithRedirect({
+                            responseType: 'token',
+                            state: 'Rush2112' // will be URI encoded
+                        });
+                    });
+            })
+            .catch(function (err) {
+                // handle OAuthError
+                console.log("We do not have any tokens - redirecting to Okta");
+                authClient.token.getWithRedirect({
+                    responseType: 'token',
+                    state: 'Rush2112' // will be URI encoded
+                });
+            });
+    </script>
+}

@@ -1,18 +1,25 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+//===============================================================================
+// Microsoft FastTrack for Azure
+// Okta Azure API Management Samples
+//===============================================================================
+// Copyright © Microsoft Corporation.  All rights reserved.
+// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY
+// OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT
+// LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+// FITNESS FOR A PARTICULAR PURPOSE.
+//===============================================================================
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Okta.AspNetCore;
+using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace OktaAPIMCore
 {
@@ -54,12 +61,13 @@ namespace OktaAPIMCore
             .AddOktaMvc(new OktaMvcOptions
             {
                 OktaDomain = Configuration.GetValue<string>("Okta:OrgUrl"),
+                AuthorizationServerId = Configuration.GetValue<string>("Okta:AuthorizationServer"),
                 ClientId = Configuration.GetValue<string>("Okta:ClientId"),
                 ClientSecret = Configuration.GetValue<string>("Okta:ClientSecret"),
                 Scope = new List<string> { "openid", "profile", "email", "nimccollapimprod" },
                 OnTokenValidated = context =>
                 {
-                    string accessToken = context.SecurityToken.RawData;
+                    string accessToken = context.TokenEndpointResponse.AccessToken;
                     List<Claim> claims = new List<Claim>() { new Claim("AccessToken", accessToken) };
                     context.Principal.AddIdentity(new ClaimsIdentity(claims));
                     return Task.CompletedTask;
